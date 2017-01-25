@@ -53,11 +53,8 @@ public class CssCompressor {
             int startIndex = m.start() + (preservedToken.length() + 1);
             String terminator = m.group(1);
 
-            // skip this, if CSS was already copied to "sb" upto this position
-            if (m.start() < appendIndex) {
                 continue;
             }
-
             if (terminator.length() == 0) {
                 terminator = ")";
             }
@@ -119,6 +116,10 @@ public class CssCompressor {
         String token;
         int totallen = css.length();
         String placeholder;
+
+        css = this.preserveToken(css, "url", "(?i)url\\(\\s*([\"']?)data\\:", true, preservedTokens);
+        css = this.preserveToken(css, "calc",  "(?i)calc\\s*([\"']?)", false, preservedTokens);
+        css = this.preserveToken(css, "progid:DXImageTransform.Microsoft.Matrix",  "(?i)progid:DXImageTransform.Microsoft.Matrix\\s*([\"']?)", false, preservedTokens);
 
 
         StringBuffer sb = new StringBuffer(css);
